@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e503f0fbf1f566d4fb31e5dad54caf49, type: 3}
-  m_Name: Lettuce
+  m_Name: Flower
   m_EditorClassIdentifier: 
-  ingredientName: Lettuce
+  ingredientName: Flower
   weight: 10
-  ingredientType: 2
-  icon: {fileID: -5936142501086707167, guid: 5bc7c62cb28b1e14c9ee5a8d14bc80a4, type: 3}
-  ingredientPrefab: {fileID: 5443925194179226695, guid: c9f8f0688ed69d04b9a06f4c3594640a, type: 3}
+  ingredientType: 3
+  icon: {fileID: -5780029879127157991, guid: 5bc7c62cb28b1e14c9ee5a8d14bc80a4, type: 3}
+  ingredientPrefab: {fileID: 5443925194179226695, guid: 6e4bafd96f84d894c8d477a16227a623, type: 3}
