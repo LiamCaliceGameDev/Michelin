@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e503f0fbf1f566d4fb31e5dad54caf49, type: 3}
+  m_Name: Aubergine
+  m_EditorClassIdentifier: 
+  ingredientName: Aubergine
+  weight: 10
+  ingredientType: 2
+  icon: {fileID: -2413806693520163455, guid: f79869b1a6476d7489d2d6ef82b3fc86, type: 3}
+  ingredientPrefab: {fileID: 5443925194179226695, guid: a8706c6f4aef6dd41972640c86462d57, type: 3}
