@@ -1645,6 +1645,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b606a3a408ac5884285066e6d2afb2a0, type: 2}
   - {fileID: 11400000, guid: 0faefaac58526c843850e6e77b4fbe63, type: 2}
   - {fileID: 11400000, guid: e1e0619501159e64a924dce7bfe9e41f, type: 2}
+  - {fileID: 11400000, guid: fbe0b3499059d3e4aa8df00a829a86db, type: 2}
   minRules: 2
   maxRules: 4
   ruleUIManager: {fileID: 1000154200}

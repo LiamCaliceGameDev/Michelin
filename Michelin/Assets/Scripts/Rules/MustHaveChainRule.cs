@@ -51,14 +51,26 @@ public class MustHaveChainRule : PlateRule
 
     public override bool IsCompatibleWith(List<PlateRule> existingRules)
     {
-        var countRule = existingRules.OfType<IngredientCountRule>().FirstOrDefault();
-        if (countRule != null)
+        foreach (var rule in existingRules)
         {
-            return chainSize <= countRule.requiredCount;
+            // Incompatible with ingredient count rules
+            if (rule is IngredientCountRule ingredientCountRule)
+            {
+                if (ingredientCountRule.requiredCount <= chainSize)
+                    return false;
+            }
+
+            // Incompatible with other ChainRules
+            if (rule is MustHaveChainRule)
+                return false;
+
+            // Incompatible with NoCollisionsRule
+            if (rule is NoCollisionsRule)
+                return false;
         }
 
-        // If no count rule exists yet, assume it's compatible for now
         return true;
     }
+
 
 }
