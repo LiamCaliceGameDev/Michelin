@@ -16,11 +16,15 @@ public class GameIngredient : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private static int sortingOrderCounter = 0;
 
+    private Animator plateAnim;
+
     // Track connected ingredients via triggers
     public HashSet<GameIngredient> touchingIngredients = new HashSet<GameIngredient>();
 
     void Awake()
     {
+        plateAnim = GameObject.FindGameObjectWithTag("Plate").GetComponent<Animator>();
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
@@ -60,6 +64,7 @@ public class GameIngredient : MonoBehaviour
             {
                 if (selected && PlateManager.instance.IsWithinPlate(transform.position))
                 {
+					plateAnim.SetTrigger("shake");
                     placed = true;
                     PlateManager.instance.RegisterIngredient(this);
                 }
@@ -67,7 +72,8 @@ public class GameIngredient : MonoBehaviour
                 {
                     if (!isBeingBinned)
                     {
-                        PlateManager.instance.UnRegisterIngrediennt(this);
+						plateAnim.SetTrigger("shake");
+						PlateManager.instance.UnRegisterIngrediennt(this);
                         Destroy(gameObject);
                     }
                 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ingredient
   - Bin
+  - Plate
   layers:
   - Default
   - TransparentFX

@@ -18,7 +18,7 @@ public class RuleUIManager : MonoBehaviour
         foreach (var rule in rules)
         {
             GameObject textObj = Instantiate(ruleTextPrefab, ruleListParent);
-            textObj.GetComponent<TMP_Text>().text = rule.ruleName;
+            textObj.GetComponentInChildren<TMP_Text>().text = rule.ruleName;
         }
     }
 }
