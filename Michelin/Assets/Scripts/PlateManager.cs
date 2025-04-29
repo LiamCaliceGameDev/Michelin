@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static Ingredient;
 
 public class PlateManager : MonoBehaviour
@@ -34,6 +35,12 @@ public class PlateManager : MonoBehaviour
     private float timer;
     private bool timerRunning = false;
 
+    public int totalLives = 3;          // Total number of lives
+    private int remainingLives;         // Remaining lives
+    public List<GameObject> badMarkers; // Bad markers for UI (3 bad markers in your UI)
+
+    public UnityEngine.UI.Text livesText; // Optional: to show the remaining lives
+
 
     private void Awake()
     {
@@ -42,6 +49,8 @@ public class PlateManager : MonoBehaviour
 
     private void Start()
     {
+        remainingLives = totalLives;
+        UpdateLivesUI();  // Update UI to show initial lives
         NewPlate();
     }
     public void NewPlate()
@@ -192,6 +201,7 @@ public class PlateManager : MonoBehaviour
         else
         {
             Debug.Log("❌ Wrong! Some rules are not satisfied.");
+            LoseLife();  // Subtract a life if the order is wrong
         }
 
         NewPlate();
@@ -254,6 +264,7 @@ public class PlateManager : MonoBehaviour
             {
                 timerRunning = false;
                 Debug.Log("⏰ You took too long!");
+                LoseLife();  // Subtract a life if the order is wrong
                 NewPlate(); // Automatically reset plate
             }
         }
@@ -261,6 +272,41 @@ public class PlateManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             print(GetLongestIngredientChain());
+        }
+    }
+
+
+    private void UpdateLivesUI()
+    {
+        // Update Bad Markers (set active depending on remaining lives)
+        for (int i = 0; i < badMarkers.Count; i++)
+        {
+            if (i < totalLives - remainingLives)
+            {
+                badMarkers[i].SetActive(true); // Show the bad marker
+            }
+            else
+            {
+                badMarkers[i].SetActive(false); // Hide the bad marker
+            }
+        }
+
+        // Optional: Update lives text (e.g., "Lives: 3")
+        if (livesText != null)
+        {
+            livesText.text = "Lives: " + remainingLives;
+        }
+
+    }
+
+    private void LoseLife()
+    {
+        remainingLives--;
+        UpdateLivesUI();  // Update the UI
+
+        if (remainingLives <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
