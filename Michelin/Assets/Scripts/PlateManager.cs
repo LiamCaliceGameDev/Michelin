@@ -1,10 +1,20 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static Ingredient;
 
 public class PlateManager : MonoBehaviour
 {
+
+    [Header("Rule System")]
+    public List<PlateRule> currentRules = new List<PlateRule>();
+    public List<PlateRule> availableRules; // Assign via Inspector (add your rule assets here)
+    public int minRules = 1;
+    public int maxRules = 1;
+
+    public RuleUIManager ruleUIManager; // Assign via Inspector
+
+
     [Header("Plate Settings")]
     public Vector3 plateCenter = Vector3.zero;
     public float plateRadius = 1.0f;
@@ -22,7 +32,25 @@ public class PlateManager : MonoBehaviour
         instance = this;
     }
 
-  
+    private void Start()
+    {
+        NewPlate();
+    }
+    public void NewPlate()
+    {
+        ResetPlate();
+        currentRules.Clear();
+
+        int ruleCount = Random.Range(minRules, maxRules + 1);
+        for (int i = 0; i < ruleCount; i++)
+        {
+            PlateRule rule = availableRules[Random.Range(0, availableRules.Count)];
+            currentRules.Add(rule);
+        }
+
+        ruleUIManager?.DisplayRules(currentRules);
+    }
+
 
     private void OnDrawGizmos()
     {
@@ -103,6 +131,23 @@ public class PlateManager : MonoBehaviour
         }
 
         ingredientsOnPlate.Clear();
+    }
+
+    public void SendOutPlate()
+    {
+        bool allRulesSatisfied = currentRules.All(rule => rule.IsRuleSatisfied(this));
+
+        if (allRulesSatisfied)
+        {
+            Debug.Log("✅ Success! All rules are satisfied.");
+        }
+        else
+        {
+            Debug.Log("❌ Wrong! Some rules are not satisfied.");
+        }
+
+        NewPlate();
+
     }
 
 
