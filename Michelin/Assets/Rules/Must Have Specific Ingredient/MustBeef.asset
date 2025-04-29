@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78628429197d8564691f649ab3f4789d, type: 3}
   m_Name: MustBeef
   m_EditorClassIdentifier: 
-  ruleName: 
-  requiredIngredient: {fileID: 0}
+  ruleName: 'Must contain: Beef'
+  requiredIngredient: {fileID: 11400000, guid: 7793de0c68f4f8f4ca8d6a61d4be4ef4, type: 2}

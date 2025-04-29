@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameIngredient : MonoBehaviour
@@ -9,12 +10,14 @@ public class GameIngredient : MonoBehaviour
     [Header("State Flags")]
     public bool selected = false;
     public bool placed = false;
-
-    private Vector3 offset;
     public bool isBeingBinned;
 
+    private Vector3 offset;
     private SpriteRenderer spriteRenderer;
     private static int sortingOrderCounter = 0;
+
+    // Track connected ingredients via triggers
+    public HashSet<GameIngredient> touchingIngredients = new HashSet<GameIngredient>();
 
     void Awake()
     {
@@ -29,7 +32,6 @@ public class GameIngredient : MonoBehaviour
             spriteRenderer.sortingOrder = sortingOrderCounter;
         }
     }
-
 
     void OnMouseDown()
     {
@@ -77,13 +79,28 @@ public class GameIngredient : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isBeingBinned)
+        var otherIngredient = other.GetComponent<GameIngredient>();
+
+        if (otherIngredient != null && otherIngredient != this)
         {
-            if (other.CompareTag("Bin"))
-            {
-                PlateManager.instance.UnRegisterIngrediennt(this);
-                Destroy(gameObject);
-            }
+            touchingIngredients.Add(otherIngredient);
+            otherIngredient.touchingIngredients.Add(this);
+        }
+
+        if (isBeingBinned && other.CompareTag("Bin"))
+        {
+            PlateManager.instance.UnRegisterIngrediennt(this);
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        var otherIngredient = other.GetComponent<GameIngredient>();
+        if (otherIngredient != null)
+        {
+            touchingIngredients.Remove(otherIngredient);
+            otherIngredient.touchingIngredients.Remove(this);
         }
     }
 

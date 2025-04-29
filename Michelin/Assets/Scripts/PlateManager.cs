@@ -45,40 +45,43 @@ public class PlateManager : MonoBehaviour
         currentRules.Clear();
 
         int ruleCount = Random.Range(minRules, maxRules + 1);
-        int safety = 100;
+        List<PlateRule> selectedRules = new List<PlateRule>();
 
-        while (currentRules.Count < ruleCount && safety-- > 0)
+        var shuffled = availableRules.OrderBy(r => Random.value).ToList();
+
+        // STEP 1: Force-add a MustHaveIngredientCountRule first (if available)
+        PlateRule countRule = shuffled.FirstOrDefault(r => r is IngredientCountRule);
+        if (countRule != null)
         {
-            PlateRule candidate = availableRules[Random.Range(0, availableRules.Count)];
+            selectedRules.Add(countRule);
+        }
 
-            bool isDuplicate = currentRules.Any(r => r.name == candidate.name);
-            bool isCompatible = candidate.IsCompatibleWith(currentRules);
+        bool chainRuleAdded = false;
 
-            // Extra protection: prevent "Must Not Contain" from excluding all types
-            if (candidate is MustNotContainTypesRule notContainRule)
+        // STEP 2: Add compatible rules
+        foreach (var rule in shuffled)
+        {
+            if (selectedRules.Contains(rule)) continue;
+
+            // Skip additional chain rules if one is already added
+            if (chainRuleAdded && rule is MustHaveChainRule)
+                continue;
+
+            if (selectedRules.Count < ruleCount && rule.IsCompatibleWith(selectedRules))
             {
-                var allProhibited = new HashSet<Ingredient.IngredientType>(notContainRule.prohibitedTypes);
+                selectedRules.Add(rule);
 
-                // Combine with existing rules
-                foreach (var existing in currentRules.OfType<MustNotContainTypesRule>())
+                if (rule is MustHaveChainRule)
                 {
-                    allProhibited.UnionWith(existing.prohibitedTypes);
+                    chainRuleAdded = true;
                 }
-
-                if (allProhibited.Count >= allIngredientTypes.Count)
-                {
-                    continue; // Would exclude everything
-                }
-            }
-
-            if (!isDuplicate && isCompatible)
-            {
-                currentRules.Add(candidate);
             }
         }
 
+        currentRules = selectedRules;
         ruleUIManager?.DisplayRules(currentRules);
     }
+
 
 
 
@@ -179,6 +182,53 @@ public class PlateManager : MonoBehaviour
 
         NewPlate();
 
+    }
+
+    public int GetLongestIngredientChain()
+    {
+        int maxChain = 0;
+        HashSet<GameIngredient> visited = new HashSet<GameIngredient>();
+
+        foreach (var ingredient in ingredientsOnPlate)
+        {
+            if (!visited.Contains(ingredient))
+            {
+                int chainLength = DepthFirstChain(ingredient, visited);
+                if (chainLength > maxChain)
+                {
+                    maxChain = chainLength;
+                }
+            }
+        }
+
+        return maxChain;
+    }
+
+    private int DepthFirstChain(GameIngredient ingredient, HashSet<GameIngredient> visited)
+    {
+        if (visited.Contains(ingredient)) return 0;
+
+        visited.Add(ingredient);
+        int count = 1;
+
+        foreach (var neighbor in ingredient.touchingIngredients)
+        {
+            if (ingredientsOnPlate.Contains(neighbor)) // Only count plate ingredients
+            {
+                count += DepthFirstChain(neighbor, visited);
+            }
+        }
+
+        return count;
+    }
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            print(GetLongestIngredientChain());
+        }
     }
 
 

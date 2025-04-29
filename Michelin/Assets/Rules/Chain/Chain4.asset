@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78628429197d8564691f649ab3f4789d, type: 3}
-  m_Name: MustLettuce
+  m_Script: {fileID: 11500000, guid: 7be82e13dccd4444a9043b54a6a89c75, type: 3}
+  m_Name: Chain4
   m_EditorClassIdentifier: 
-  ruleName: 'Must contain: Lettuce'
-  requiredIngredient: {fileID: 11400000, guid: 5d2085f219a17bb48bb83eb3e5d0e1a4, type: 2}
+  ruleName: 
+  chainSize: 4

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredientName: Lettuce
   weight: 10
-  ingredientType: 2
+  ingredientType: 3
   icon: {fileID: -5936142501086707167, guid: 5bc7c62cb28b1e14c9ee5a8d14bc80a4, type: 3}
   ingredientPrefab: {fileID: 5443925194179226695, guid: c9f8f0688ed69d04b9a06f4c3594640a, type: 3}

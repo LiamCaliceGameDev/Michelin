@@ -1638,6 +1638,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8ca92574e894ca74da5498891bf68ed7, type: 2}
   - {fileID: 11400000, guid: 332e19195a1df59499f46cafc3c0114d, type: 2}
   - {fileID: 11400000, guid: 056873daa3d479449b1e9b9b5f0ca433, type: 2}
+  - {fileID: 11400000, guid: 324cc5ee575be0c408a0cb757cfc0363, type: 2}
+  - {fileID: 11400000, guid: ee467300ff0e85246be1c8b58e891b12, type: 2}
+  - {fileID: 11400000, guid: 05f55f834f5799a4192cd84b3b54bdfd, type: 2}
+  - {fileID: 11400000, guid: a70e966ff91028e4d8717bb755df06a7, type: 2}
+  - {fileID: 11400000, guid: b606a3a408ac5884285066e6d2afb2a0, type: 2}
+  - {fileID: 11400000, guid: 0faefaac58526c843850e6e77b4fbe63, type: 2}
+  - {fileID: 11400000, guid: e1e0619501159e64a924dce7bfe9e41f, type: 2}
   minRules: 2
   maxRules: 4
   ruleUIManager: {fileID: 1000154200}
