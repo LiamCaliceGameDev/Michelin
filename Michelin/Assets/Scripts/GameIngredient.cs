@@ -11,14 +11,38 @@ public class GameIngredient : MonoBehaviour
     public bool placed = false;
 
     private Vector3 offset;
-
     public bool isBeingBinned;
+
+    private SpriteRenderer spriteRenderer;
+    private static int sortingOrderCounter = 0;
+
+    void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            Debug.LogWarning("No SpriteRenderer found on " + gameObject.name);
+        }
+        else
+        {
+            sortingOrderCounter++;
+            spriteRenderer.sortingOrder = sortingOrderCounter;
+        }
+    }
+
 
     void OnMouseDown()
     {
         selected = true;
         placed = false;
         offset = transform.position - GetMouseWorldPosition();
+
+        // Bring this ingredient to front
+        if (spriteRenderer != null)
+        {
+            sortingOrderCounter++;
+            spriteRenderer.sortingOrder = sortingOrderCounter;
+        }
     }
 
     void Update()
@@ -28,12 +52,12 @@ public class GameIngredient : MonoBehaviour
             transform.position = GetMouseWorldPosition() + offset;
         }
 
-        if (!placed) {
+        if (!placed)
+        {
             if (Input.GetMouseButtonUp(0))
             {
                 if (selected && PlateManager.instance.IsWithinPlate(transform.position))
                 {
-                  
                     placed = true;
                 }
                 else
@@ -42,13 +66,11 @@ public class GameIngredient : MonoBehaviour
                     {
                         Destroy(gameObject);
                     }
-                   
                 }
 
                 selected = false;
             }
         }
-        
     }
 
     private void OnTriggerEnter2D(Collider2D other)

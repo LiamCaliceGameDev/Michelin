@@ -14,6 +14,7 @@ public class IngredientUI : MonoBehaviour
         if (ingredientData != null && iconImage != null)
         {
             iconImage.sprite = ingredientData.icon;
+            iconImage.preserveAspect = true;
         }
     }
 
