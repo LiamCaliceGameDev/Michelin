@@ -2,11 +2,12 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI; // Make sure to include this to access UI components
 using static Ingredient;
+using TMPro;
 
 public class PlateManager : MonoBehaviour
 {
-
     [Header("Rule System")]
     public List<PlateRule> currentRules = new List<PlateRule>();
     public List<PlateRule> availableRules; // Assign via Inspector (add your rule assets here)
@@ -30,7 +31,7 @@ public class PlateManager : MonoBehaviour
 
     public List<Ingredient.IngredientType> allIngredientTypes; // List of all ingredient types in your game
 
-    public UnityEngine.UI.Slider timeSlider; // Assign in Inspector
+    public Slider timeSlider; // Assign in Inspector
     public float maxTimePerPlate = 60f; // Max time for each plate (in seconds)
     private float timer;
     private bool timerRunning = false;
@@ -39,8 +40,12 @@ public class PlateManager : MonoBehaviour
     private int remainingLives;         // Remaining lives
     public List<GameObject> badMarkers; // Bad markers for UI (3 bad markers in your UI)
 
-    public UnityEngine.UI.Text livesText; // Optional: to show the remaining lives
-
+    public TMP_Text scoreText; // UI text to display the score (assign in Inspector)
+    public int score = 0; // To keep track of the player's score
+    public int bonusPointsFor5Seconds = 50;  // Points for completing within 5 seconds
+    public int bonusPointsFor10Seconds = 30; // Points for completing within 10 seconds
+    public int basePoints;
+    private float plateStartTime; // To track when the plate started (for bonus points)
 
     private void Awake()
     {
@@ -53,6 +58,7 @@ public class PlateManager : MonoBehaviour
         UpdateLivesUI();  // Update UI to show initial lives
         NewPlate();
     }
+
     public void NewPlate()
     {
         ResetPlate();
@@ -98,16 +104,14 @@ public class PlateManager : MonoBehaviour
         timer = maxTimePerPlate;
         timerRunning = true;
 
+        plateStartTime = Time.time; // Record the time when the plate starts
+
         if (timeSlider != null)
         {
             timeSlider.maxValue = maxTimePerPlate;
             timeSlider.value = maxTimePerPlate;
         }
     }
-
-
-
-
 
     private void OnDrawGizmos()
     {
@@ -197,6 +201,9 @@ public class PlateManager : MonoBehaviour
         if (allRulesSatisfied)
         {
             Debug.Log("✅ Success! All rules are satisfied.");
+
+            // Add points for successfully completing the plate
+            AddPointsForSuccess();
         }
         else
         {
@@ -205,7 +212,6 @@ public class PlateManager : MonoBehaviour
         }
 
         NewPlate();
-
     }
 
     public int GetLongestIngredientChain()
@@ -246,7 +252,6 @@ public class PlateManager : MonoBehaviour
         return count;
     }
 
-
     private void Update()
     {
         if (timerRunning)
@@ -275,7 +280,6 @@ public class PlateManager : MonoBehaviour
         }
     }
 
-
     private void UpdateLivesUI()
     {
         // Update Bad Markers (set active depending on remaining lives)
@@ -291,12 +295,6 @@ public class PlateManager : MonoBehaviour
             }
         }
 
-        // Optional: Update lives text (e.g., "Lives: 3")
-        if (livesText != null)
-        {
-            livesText.text = "Lives: " + remainingLives;
-        }
-
     }
 
     private void LoseLife()
@@ -310,5 +308,35 @@ public class PlateManager : MonoBehaviour
         }
     }
 
+    private void AddPointsForSuccess()
+    {
+        float timeTaken = Time.time - plateStartTime; // Calculate time taken to complete the plate
 
+        int pointsToAdd = basePoints;  // Base points for a successful plate
+
+        // Award bonus points based on how fast the player completed the plate
+        if (timeTaken <= 5f)
+        {
+            pointsToAdd += bonusPointsFor5Seconds;
+            Debug.Log("Bonus: 5 seconds! Added " + bonusPointsFor5Seconds + " points.");
+        }
+        else if (timeTaken <= 10f)
+        {
+            pointsToAdd += bonusPointsFor10Seconds;
+            Debug.Log("Bonus: 10 seconds! Added " + bonusPointsFor10Seconds + " points.");
+        }
+
+        score += pointsToAdd; // Add the points to the score
+        Debug.Log("Added " + pointsToAdd + " points. Total score: " + score);
+
+        UpdateScoreUI();  // Update the UI with the new score
+    }
+
+    private void UpdateScoreUI()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + score; // Display the score
+        }
+    }
 }
