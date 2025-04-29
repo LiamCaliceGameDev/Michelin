@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static Ingredient;
 
 public class PlateManager : MonoBehaviour
 {
@@ -11,9 +14,20 @@ public class PlateManager : MonoBehaviour
 
     public static PlateManager instance;
 
+    // List of ingredients currently on the plate
+    public List<GameIngredient> ingredientsOnPlate = new List<GameIngredient>();
+
     private void Awake()
     {
         instance = this;
+    }
+
+  
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = gizmoColor;
+        Gizmos.DrawWireSphere(transform.position + plateCenter, plateRadius);
     }
 
     /// <summary>
@@ -33,9 +47,63 @@ public class PlateManager : MonoBehaviour
         return distance <= plateRadius;
     }
 
-    private void OnDrawGizmos()
+    /// <summary>
+    /// Call this when an ingredient is placed on the plate.
+    /// </summary>
+    public void RegisterIngredient(GameIngredient ingredient)
     {
-        Gizmos.color = gizmoColor;
-        Gizmos.DrawWireSphere(transform.position + plateCenter, plateRadius);
+        if (!ingredientsOnPlate.Contains(ingredient))
+        {
+            ingredientsOnPlate.Add(ingredient);
+        }
     }
+
+    public void UnRegisterIngrediennt(GameIngredient ingredient)
+    {
+        if (ingredientsOnPlate.Contains(ingredient))
+        {
+            ingredientsOnPlate.Remove(ingredient);
+        }
+    }
+
+    /// <summary>
+    /// Call this when an ingredient is removed/destroyed.
+    /// </summary>
+    public void UnregisterIngredient(GameIngredient ingredient)
+    {
+        ingredientsOnPlate.Remove(ingredient);
+    }
+
+    public int GetTotalIngredients()
+    {
+        return ingredientsOnPlate.Count;
+    }
+
+    public float GetTotalWeight()
+    {
+        return ingredientsOnPlate.Sum(i => i.ingredientData.weight);
+    }
+
+    public int GetIngredientCountByType(IngredientType type)
+    {
+        return ingredientsOnPlate.Count(i => i.ingredientData.ingredientType == type);
+    }
+
+    public void ResetPlate()
+    {
+        // Create a copy to avoid modifying the list while iterating
+        var ingredientsToRemove = new List<GameIngredient>(ingredientsOnPlate);
+
+        foreach (var ingredient in ingredientsToRemove)
+        {
+            if (ingredient != null)
+            {
+                Destroy(ingredient.gameObject);
+            }
+        }
+
+        ingredientsOnPlate.Clear();
+    }
+
+
 }

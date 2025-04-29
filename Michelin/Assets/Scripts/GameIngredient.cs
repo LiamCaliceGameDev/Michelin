@@ -59,11 +59,13 @@ public class GameIngredient : MonoBehaviour
                 if (selected && PlateManager.instance.IsWithinPlate(transform.position))
                 {
                     placed = true;
+                    PlateManager.instance.RegisterIngredient(this);
                 }
                 else
                 {
                     if (!isBeingBinned)
                     {
+                        PlateManager.instance.UnRegisterIngrediennt(this);
                         Destroy(gameObject);
                     }
                 }
@@ -79,6 +81,7 @@ public class GameIngredient : MonoBehaviour
         {
             if (other.CompareTag("Bin"))
             {
+                PlateManager.instance.UnRegisterIngrediennt(this);
                 Destroy(gameObject);
             }
         }
