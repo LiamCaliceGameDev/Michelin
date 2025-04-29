@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e503f0fbf1f566d4fb31e5dad54caf49, type: 3}
-  m_Name: Aubergine
+  m_Name: Sea Bass
   m_EditorClassIdentifier: 
-  ingredientName: Aubergine
+  ingredientName: Sea Bass
   weight: 10
-  ingredientType: 2
-  icon: {fileID: -4301489815511971703, guid: 5bc7c62cb28b1e14c9ee5a8d14bc80a4, type: 3}
-  ingredientPrefab: {fileID: 5443925194179226695, guid: a8706c6f4aef6dd41972640c86462d57, type: 3}
+  ingredientType: 0
+  icon: {fileID: 4329199477040147280, guid: 5bc7c62cb28b1e14c9ee5a8d14bc80a4, type: 3}
+  ingredientPrefab: {fileID: 5443925194179226695, guid: c4227aaaafcd5ec4d8b17e253eba54d8, type: 3}

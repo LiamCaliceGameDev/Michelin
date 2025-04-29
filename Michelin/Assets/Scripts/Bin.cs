@@ -38,4 +38,17 @@ public class Bin : MonoBehaviour
 
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        GameIngredient ingredient = collision.GetComponent<GameIngredient>();
+
+        if (ingredient != null)
+        {
+
+            ingredient.isBeingBinned = false;
+
+
+        }
+    }
 }
