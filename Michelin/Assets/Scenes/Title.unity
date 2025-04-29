@@ -344,7 +344,11 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &1100067248
+=======
+--- !u!1 &704852388
+>>>>>>> Stashed changes
 =======
 --- !u!1 &704852388
 >>>>>>> Stashed changes
@@ -356,16 +360,22 @@ GameObject:
   serializedVersion: 6
   m_Component:
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - component: {fileID: 1100067250}
   - component: {fileID: 1100067249}
   - component: {fileID: 1100067251}
   m_Layer: 0
   m_Name: Soundtrack
 =======
+=======
+>>>>>>> Stashed changes
   - component: {fileID: 704852390}
   - component: {fileID: 704852389}
   m_Layer: 0
   m_Name: GameObject
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -373,7 +383,11 @@ GameObject:
   m_StaticEditorFlags: 0
   m_IsActive: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!82 &1100067249
+=======
+--- !u!82 &704852389
+>>>>>>> Stashed changes
 =======
 --- !u!82 &704852389
 >>>>>>> Stashed changes
@@ -382,6 +396,7 @@ AudioSource:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_GameObject: {fileID: 1100067248}
   m_Enabled: 1
@@ -392,6 +407,8 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.141
 =======
+=======
+>>>>>>> Stashed changes
   m_GameObject: {fileID: 704852388}
   m_Enabled: 1
   serializedVersion: 4
@@ -544,6 +561,9 @@ AudioSource:
   m_Resource: {fileID: 8300000, guid: aed2805076681a7488f796bd775c0bb8, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
   m_Pitch: 1
   Loop: 0
@@ -629,6 +649,7 @@ AudioSource:
     m_PostInfinity: 2
     m_RotationOrder: 4
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!4 &1100067250
 Transform:
   m_ObjectHideFlags: 0
@@ -656,6 +677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c651aaa98ddc14e80d17b22885d5e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 --- !u!1 &1208226866
@@ -976,7 +999,11 @@ SceneRoots:
   - {fileID: 402658797}
   - {fileID: 1649957437}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - {fileID: 1100067250}
+=======
+  - {fileID: 704852390}
+>>>>>>> Stashed changes
 =======
   - {fileID: 704852390}
 >>>>>>> Stashed changes
