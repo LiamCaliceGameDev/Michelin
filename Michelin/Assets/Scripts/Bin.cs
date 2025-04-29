@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class Bin : MonoBehaviour
 {
+    public AudioSource source;
     private void OnTriggerStay2D(Collider2D other)
     {
         GameIngredient ingredient = other.GetComponent<GameIngredient>();
-
-        if (ingredient != null)
+		source.Play();
+		if (ingredient != null)
         {
 
             if (ingredient.selected == false)
@@ -32,8 +33,8 @@ public class Bin : MonoBehaviour
 
         if (ingredient != null)
         {
-
-          ingredient.isBeingBinned = true;
+			source.Play();
+			ingredient.isBeingBinned = true;
            
 
         }
@@ -47,7 +48,7 @@ public class Bin : MonoBehaviour
         {
 
             ingredient.isBeingBinned = false;
-
+            source.Play();
 
         }
     }

@@ -52,6 +52,9 @@ public class PlateManager : MonoBehaviour
     public TMP_Text bonusText; // Text to display the bonus points (assign in Inspector)
     public float bonusIndicatorDuration = 1f; // Duration for how long the bonus indicator will stay active
 
+
+    public AudioSource source;
+
     private void Awake()
     {
         instance = this;
@@ -201,6 +204,7 @@ public class PlateManager : MonoBehaviour
             LoseLife();
         }
 
+        source.Play();
         NewPlate();
     }
 
