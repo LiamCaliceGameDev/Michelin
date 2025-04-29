@@ -29,6 +29,11 @@ public class PlateManager : MonoBehaviour
 
     public List<Ingredient.IngredientType> allIngredientTypes; // List of all ingredient types in your game
 
+    public UnityEngine.UI.Slider timeSlider; // Assign in Inspector
+    public float maxTimePerPlate = 60f; // Max time for each plate (in seconds)
+    private float timer;
+    private bool timerRunning = false;
+
 
     private void Awake()
     {
@@ -80,6 +85,15 @@ public class PlateManager : MonoBehaviour
 
         currentRules = selectedRules;
         ruleUIManager?.DisplayRules(currentRules);
+
+        timer = maxTimePerPlate;
+        timerRunning = true;
+
+        if (timeSlider != null)
+        {
+            timeSlider.maxValue = maxTimePerPlate;
+            timeSlider.value = maxTimePerPlate;
+        }
     }
 
 
@@ -225,6 +239,25 @@ public class PlateManager : MonoBehaviour
 
     private void Update()
     {
+        if (timerRunning)
+        {
+            timer -= Time.deltaTime;
+
+            // Update slider value
+            if (timeSlider != null)
+            {
+                timeSlider.value = timer;
+            }
+
+            // Check if the time is up
+            if (timer <= 0f)
+            {
+                timerRunning = false;
+                Debug.Log("⏰ You took too long!");
+                NewPlate(); // Automatically reset plate
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             print(GetLongestIngredientChain());
