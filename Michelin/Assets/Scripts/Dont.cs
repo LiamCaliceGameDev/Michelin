@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class Dont : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private static Dont instance;
+    void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if(instance == null){ 
+            instance = this;
+			DontDestroyOnLoad(instance);
+		}else{ 
+            Destroy(gameObject);
+        }
+       
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
