@@ -27,6 +27,9 @@ public class PlateManager : MonoBehaviour
     // List of ingredients currently on the plate
     public List<GameIngredient> ingredientsOnPlate = new List<GameIngredient>();
 
+    public List<Ingredient.IngredientType> allIngredientTypes; // List of all ingredient types in your game
+
+
     private void Awake()
     {
         instance = this;
@@ -42,14 +45,42 @@ public class PlateManager : MonoBehaviour
         currentRules.Clear();
 
         int ruleCount = Random.Range(minRules, maxRules + 1);
-        for (int i = 0; i < ruleCount; i++)
+        int safety = 100;
+
+        while (currentRules.Count < ruleCount && safety-- > 0)
         {
-            PlateRule rule = availableRules[Random.Range(0, availableRules.Count)];
-            currentRules.Add(rule);
+            PlateRule candidate = availableRules[Random.Range(0, availableRules.Count)];
+
+            bool isDuplicate = currentRules.Any(r => r.name == candidate.name);
+            bool isCompatible = candidate.IsCompatibleWith(currentRules);
+
+            // Extra protection: prevent "Must Not Contain" from excluding all types
+            if (candidate is MustNotContainTypesRule notContainRule)
+            {
+                var allProhibited = new HashSet<Ingredient.IngredientType>(notContainRule.prohibitedTypes);
+
+                // Combine with existing rules
+                foreach (var existing in currentRules.OfType<MustNotContainTypesRule>())
+                {
+                    allProhibited.UnionWith(existing.prohibitedTypes);
+                }
+
+                if (allProhibited.Count >= allIngredientTypes.Count)
+                {
+                    continue; // Would exclude everything
+                }
+            }
+
+            if (!isDuplicate && isCompatible)
+            {
+                currentRules.Add(candidate);
+            }
         }
 
         ruleUIManager?.DisplayRules(currentRules);
     }
+
+
 
 
     private void OnDrawGizmos()

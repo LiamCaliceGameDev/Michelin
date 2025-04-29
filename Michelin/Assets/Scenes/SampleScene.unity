@@ -1627,16 +1627,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentRules: []
   availableRules:
-  - {fileID: 11400000, guid: 332e19195a1df59499f46cafc3c0114d, type: 2}
+  - {fileID: 11400000, guid: 7f29b8b2c1980f24da2cb7ea00a51b3b, type: 2}
+  - {fileID: 11400000, guid: fe6da51df7fff664a843560345db1f35, type: 2}
+  - {fileID: 11400000, guid: 80891366440f6dd449bc823a680afccb, type: 2}
+  - {fileID: 11400000, guid: 86ba66cfeb43a2d4d893f388830334fb, type: 2}
+  - {fileID: 11400000, guid: 34cb5c218f88bbd4abc51aace1b9b960, type: 2}
+  - {fileID: 11400000, guid: 4d016968def007d47baa76cb4a97e947, type: 2}
+  - {fileID: 11400000, guid: f37fb569589a953408a49c4306269764, type: 2}
+  - {fileID: 11400000, guid: 1e95c232d4f8da740bed9308540c87d6, type: 2}
   - {fileID: 11400000, guid: 8ca92574e894ca74da5498891bf68ed7, type: 2}
+  - {fileID: 11400000, guid: 332e19195a1df59499f46cafc3c0114d, type: 2}
   - {fileID: 11400000, guid: 056873daa3d479449b1e9b9b5f0ca433, type: 2}
-  minRules: 1
-  maxRules: 1
+  minRules: 2
+  maxRules: 4
   ruleUIManager: {fileID: 1000154200}
   plateCenter: {x: 0, y: 0, z: 0}
   plateRadius: 3.93
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
   ingredientsOnPlate: []
+  allIngredientTypes: 00000000010000000200000003000000
 --- !u!1 &1000154199
 GameObject:
   m_ObjectHideFlags: 0
