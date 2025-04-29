@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // Make sure to include this to access UI components
+using UnityEngine.UI;
 using static Ingredient;
 using TMPro;
 
@@ -15,7 +16,6 @@ public class PlateManager : MonoBehaviour
     public int maxRules = 1;
 
     public RuleUIManager ruleUIManager; // Assign via Inspector
-
 
     [Header("Plate Settings")]
     public Vector3 plateCenter = Vector3.zero;
@@ -46,6 +46,11 @@ public class PlateManager : MonoBehaviour
     public int bonusPointsFor10Seconds = 30; // Points for completing within 10 seconds
     public int basePoints;
     private float plateStartTime; // To track when the plate started (for bonus points)
+
+    [Header("Bonus UI")]
+    public GameObject bonusIndicator; // GameObject to show the bonus (assign in Inspector)
+    public TMP_Text bonusText; // Text to display the bonus points (assign in Inspector)
+    public float bonusIndicatorDuration = 1f; // Duration for how long the bonus indicator will stay active
 
     private void Awake()
     {
@@ -119,26 +124,17 @@ public class PlateManager : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position + plateCenter, plateRadius);
     }
 
-    /// <summary>
-    /// Check if a transform is within the plate area.
-    /// </summary>
     public bool IsWithinPlate(Transform objTransform)
     {
         return IsWithinPlate(objTransform.position);
     }
 
-    /// <summary>
-    /// Check if a world position is within the plate area.
-    /// </summary>
     public bool IsWithinPlate(Vector2 position)
     {
         float distance = Vector2.Distance(position, transform.position + plateCenter);
         return distance <= plateRadius;
     }
 
-    /// <summary>
-    /// Call this when an ingredient is placed on the plate.
-    /// </summary>
     public void RegisterIngredient(GameIngredient ingredient)
     {
         if (!ingredientsOnPlate.Contains(ingredient))
@@ -155,9 +151,6 @@ public class PlateManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Call this when an ingredient is removed/destroyed.
-    /// </summary>
     public void UnregisterIngredient(GameIngredient ingredient)
     {
         ingredientsOnPlate.Remove(ingredient);
@@ -180,7 +173,6 @@ public class PlateManager : MonoBehaviour
 
     public void ResetPlate()
     {
-        // Create a copy to avoid modifying the list while iterating
         var ingredientsToRemove = new List<GameIngredient>(ingredientsOnPlate);
 
         foreach (var ingredient in ingredientsToRemove)
@@ -201,14 +193,12 @@ public class PlateManager : MonoBehaviour
         if (allRulesSatisfied)
         {
             Debug.Log("✅ Success! All rules are satisfied.");
-
-            // Add points for successfully completing the plate
             AddPointsForSuccess();
         }
         else
         {
             Debug.Log("❌ Wrong! Some rules are not satisfied.");
-            LoseLife();  // Subtract a life if the order is wrong
+            LoseLife();
         }
 
         NewPlate();
@@ -243,7 +233,7 @@ public class PlateManager : MonoBehaviour
 
         foreach (var neighbor in ingredient.touchingIngredients)
         {
-            if (ingredientsOnPlate.Contains(neighbor)) // Only count plate ingredients
+            if (ingredientsOnPlate.Contains(neighbor))
             {
                 count += DepthFirstChain(neighbor, visited);
             }
@@ -258,49 +248,40 @@ public class PlateManager : MonoBehaviour
         {
             timer -= Time.deltaTime;
 
-            // Update slider value
             if (timeSlider != null)
             {
                 timeSlider.value = timer;
             }
 
-            // Check if the time is up
             if (timer <= 0f)
             {
                 timerRunning = false;
                 Debug.Log("⏰ You took too long!");
-                LoseLife();  // Subtract a life if the order is wrong
-                NewPlate(); // Automatically reset plate
+                LoseLife();
+                NewPlate();
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            print(GetLongestIngredientChain());
         }
     }
 
     private void UpdateLivesUI()
     {
-        // Update Bad Markers (set active depending on remaining lives)
         for (int i = 0; i < badMarkers.Count; i++)
         {
             if (i < totalLives - remainingLives)
             {
-                badMarkers[i].SetActive(true); // Show the bad marker
+                badMarkers[i].SetActive(true);
             }
             else
             {
-                badMarkers[i].SetActive(false); // Hide the bad marker
+                badMarkers[i].SetActive(false);
             }
         }
-
     }
 
     private void LoseLife()
     {
         remainingLives--;
-        UpdateLivesUI();  // Update the UI
+        UpdateLivesUI();
 
         if (remainingLives <= 0)
         {
@@ -310,33 +291,53 @@ public class PlateManager : MonoBehaviour
 
     private void AddPointsForSuccess()
     {
-        float timeTaken = Time.time - plateStartTime; // Calculate time taken to complete the plate
+        float timeTaken = Time.time - plateStartTime;
+        int pointsToAdd = basePoints;
 
-        int pointsToAdd = basePoints;  // Base points for a successful plate
-
-        // Award bonus points based on how fast the player completed the plate
         if (timeTaken <= 5f)
         {
             pointsToAdd += bonusPointsFor5Seconds;
-            Debug.Log("Bonus: 5 seconds! Added " + bonusPointsFor5Seconds + " points.");
+            ShowBonusText("+ " + pointsToAdd);
         }
         else if (timeTaken <= 10f)
         {
             pointsToAdd += bonusPointsFor10Seconds;
-            Debug.Log("Bonus: 10 seconds! Added " + bonusPointsFor10Seconds + " points.");
+            ShowBonusText("+ " + pointsToAdd);
+        }
+        else
+        {
+            ShowBonusText("+ " + pointsToAdd);
         }
 
-        score += pointsToAdd; // Add the points to the score
+        score += pointsToAdd;
         Debug.Log("Added " + pointsToAdd + " points. Total score: " + score);
+        UpdateScoreUI();
+    }
 
-        UpdateScoreUI();  // Update the UI with the new score
+    private void ShowBonusText(string bonus)
+    {
+        if (bonusText != null)
+        {
+            bonusText.text = bonus;
+            bonusText.gameObject.SetActive(true); // Show the bonus text
+            StartCoroutine(HideBonusText());
+        }
+    }
+
+    private IEnumerator HideBonusText()
+    {
+        yield return new WaitForSeconds(bonusIndicatorDuration);
+        if (bonusText != null)
+        {
+            bonusText.gameObject.SetActive(false); // Hide the bonus text
+        }
     }
 
     private void UpdateScoreUI()
     {
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + score; // Display the score
+            scoreText.text = "Score: " + score;
         }
     }
 }
